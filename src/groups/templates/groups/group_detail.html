@@ -1,0 +1,61 @@
+{% extends "groups/group_base.html" %}
+{% block pregroup %}
+
+    <div class ="panel panel-default" >
+        <div class="panel panel-heading">
+                <a href="{{ group.game.url }}">
+                    <h1>{{group.name}}</h1>
+                </a>
+                <h4>{{ group.game.year }}</h4>
+                <p>{{group.description_html|safe}}</p>
+
+        </div>
+        <div class="panel panel-body">
+            <div class="row">
+
+                <div class="col-md-4 col-md-offset-1">
+                    <image src="{{ group.game.cover_url }}" class="img-responsive"></image>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        {{ group.game.summary }}
+                    </p>
+                    <h2>Member Count: {{group.members.count}}</h2>
+
+                        {% if user in group.members.all %}
+
+                            <a href="{% url 'groups:leave' slug=group.slug %}" class = 'btn btn-lg btn-fill btn-warning'><span class=''glyphicon glyphicon-remove-circle></span>Leave</a>
+
+                        {% else %}
+
+                            <a href="{% url 'groups:join' slug=group.slug %}" class = 'btn btn-lg btn-fill btn-warning'><span class=''glyphicon glyphicon-ok-circle></span>Join</a>
+                        {% endif %}
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block group_content %}
+    <div class="row">
+        {% if group.posts.count == 0 %}
+            <h2>No posts in this group yet...</h2>
+        {% else %}
+            {% for post in group.posts.all %}
+                {% include "posts/_post.html" %}
+
+            {% endfor %}
+
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
